@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shandong.human.resource.mapper.city.CityMapper">
+
+    <resultMap id="Company" type="com.shandong.human.resource.domain.Company">
+        <id column="id" property="id"/>
+        <result column="province_id" property="province_id"/>
+        <result column="city_id" property="city_id"/>
+        <result column="area_id" property="area_id"/>
+        <result column="address" property="address"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="business" property="business"/>
+        <result column="contact" property="contact"/>
+        <result column="zipcode" property="zipcode"/>
+        <result column="phone" property="phone"/>
+        <result column="fax" property="fax"/>
+        <result column="email" property="email"/>
+    </resultMap>
+
+    <resultMap id="CompanyData" type="com.shandong.human.resource.domain.CompanyData">
+        <id column="id" property="id"/>
+        <result column="pid" property="pid"/>
+        <result column="company_id" property="company_id"/>
+        <result column="survey_time_id" property="survey_time_id"/>
+        <result column="init_people" property="init_people"/>
+        <result column="cur_people" property="cur_people"/>
+        <result column="other_reason" property="other_reason"/>
+        <result column="reduce_type" property="reduce_type"/>
+        <result column="reason1" property="reason1"/>
+        <result column="reason1_explain" property="reason1_explain"/>
+        <result column="reason2" property="reason2"/>
+        <result column="reason2_explain" property="reason2_explain"/>
+        <result column="reason3" property="reason3"/>
+        <result column="reason3_explain" property="reason3_explain"/>
+        <result column="status" property="status"/>
+        <result column="not_pass_reason" property="not_pass_reason"/>
+        <result column="create_time" property="create_time"/>
+        <result column="update_time" property="update_time"/>
+    </resultMap>
+
+
+    <select id="getCompanyIdByCityId" resultMap="Company" parameterType="int">
+        SELECT * FROM company WHERE city_id=#{city_id}
+    </select>
+
+    <select id="getCompanyDataByCompanyIdStatus0" resultMap="CompanyData" parameterType="int">
+        SELECT * FROM company_data WHERE company_id = #{company_id} AND status = 0 ORDER BY company_id
+    </select>
+
+    <update id="cityCheckPass" parameterType="int">
+        UPDATE company_data SET status = 1 ,not_pass_reason='' WHERE id = #{id}
+    </update>
+
+    <update id="cityCheckFail" parameterType="String">
+        UPDATE company_data SET status = -1 ,not_pass_reason = #{reason} WHERE id = #{id}
+    </update>
+
+
+
+
+</mapper>

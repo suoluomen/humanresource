@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shandong.human.resource.mapper.sys.AuthRoleMapper">
+
+    <resultMap id="AuthRole" type="com.shandong.human.resource.domain.AuthRole">
+        <result column="auth_id" property="auth_id" />
+        <result column="role_id" property="role_id" />
+    </resultMap>
+
+    <select id="selectByRoleID" resultMap="AuthRole" parameterType="java.lang.Integer">
+        SELECT auth_id , role_id from auth_role
+        WHERE role_id = #{role_id};
+    </select>
+
+    <delete id="deleteAuthRole" parameterType="map">
+        DELETE FROM  auth_role
+        WHERE role_id = #{role_id} AND auth_id = #{auth_id}
+    </delete>
+
+    <insert id="insertAuthRole" parameterType="map">
+        INSERT INTO auth_role(auth_id ,role_id)
+        VALUES (#{auth_id} , #{role_id})
+    </insert>
+
+    <delete id="deleteByRoleID" parameterType="java.lang.Integer">
+        DELETE  FROM auth_role
+        WHERE role_id = #{role_id}
+    </delete>
+</mapper>

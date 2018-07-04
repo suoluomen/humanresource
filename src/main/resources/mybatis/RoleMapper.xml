@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shandong.human.resource.mapper.sys.RoleMapper">
+
+    <resultMap id="Role" type="com.shandong.human.resource.domain.Role">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="Role">
+        SELECT id , name ,status FROM role
+        ORDER BY id DESC
+    </select>
+
+    <insert id="insertRole" parameterType="java.lang.String">
+        INSERT INTO role ( name )
+        VALUES (#{name})
+    </insert>
+
+    <delete id="deleteRole" parameterType="java.lang.Integer">
+        DELETE FROM role
+        WHERE id = #{id}
+    </delete>
+
+    <select id="selectByID" parameterType="java.lang.Integer">
+        SELECT id , name , status FROM role
+        WHERE id = #{id}
+    </select>
+    
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT  COUNT(*) FROM  role
+    </select>
+
+    <select id="selectByPos" resultMap="Role" parameterType="map">
+        SELECT id , name ,status FROM role
+        limit #{offset},#{size}
+    </select>
+</mapper>

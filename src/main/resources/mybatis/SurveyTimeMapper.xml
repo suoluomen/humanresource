@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shandong.human.resource.mapper.sys.SurveyTimeMapper">
+
+    <resultMap id="Survey_time" type="com.shandong.human.resource.domain.SurveyTime">
+        <id column="id" property="id"/>
+        <result column="start_time" property="start_time" jdbcType="DATE" javaType="java.util.Date"/>
+        <result column="end_time" property="end_time" jdbcType="DATE" javaType="java.util.Date"/>
+    </resultMap>
+
+
+    <select id="getAllSurveyTime" resultMap="Survey_time">
+        SELECT * FROM survey_time
+    </select>
+    
+    <insert id="insertSurveyTime" parameterType="com.shandong.human.resource.domain.SurveyTime">
+        INSERT INTO survey_time (id , start_time , end_time)
+        VALUES (#{id}, #{start_time,jdbcType=DATE} , #{end_time,jdbcType=DATE})
+    </insert>
+
+    <select id="getAllSurveyTimeById" resultMap="Survey_time">
+        SELECT * FROM survey_time WHERE id=#{id}
+    </select>
+
+    <select id="getSurveyTimeCount" resultType="int">
+        SELECT count(1) FROM survey_time
+    </select>
+</mapper>

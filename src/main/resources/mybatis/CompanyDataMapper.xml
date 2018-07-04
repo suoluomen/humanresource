@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shandong.human.resource.mapper.sys.CompanyDataMapper">
+
+    <resultMap id="CompanyData" type="com.shandong.human.resource.domain.CompanyData">
+        <id column="id" property="id"/>
+        <result column="pid" property="pid"/>
+        <result column="company_id" property="company_id"/>
+        <result column="survey_time_id" property="survey_time_id"/>
+        <result column="init_people" property="init_people"/>
+        <result column="cur_people" property="cur_people"/>
+        <result column="other_reason" property="other_reason"/>
+        <result column="reduce_type" property="reduce_type"/>
+        <result column="reason1" property="reason1"/>
+        <result column="reason1_explain" property="reason1_explain"/>
+        <result column="reason2" property="reason2"/>
+        <result column="reason2_explain" property="reason2_explain"/>
+        <result column="reason3" property="reason3"/>
+        <result column="reason3_explain" property="reason3_explain"/>
+        <result column="status" property="status"/>
+        <result column="not_pass_reason" property="not_pass_reason"/>
+        <result column="create_time" property="create_time"/>
+        <result column="update_time" property="update_time"/>
+    </resultMap>
+
+    <select id="getAllCompanyData" resultMap="CompanyData">
+        SELECT * FROM company_data WHERE status = 2 ORDER BY company_id
+    </select>
+
+    <select id="getCompanyDataByCompanyIdZTR" resultMap="CompanyData">
+        SELECT * FROM company_data WHERE company_id = #{id} ORDER BY company_id
+    </select>
+
+    <select id="getCompanyDataByCompanyId" resultMap="CompanyData">
+        SELECT * FROM company_data WHERE company_id = #{id} ORDER BY create_time
+    </select>
+
+    <select id="companyDataList" resultMap="CompanyData">
+        SELECT id, company_id, survey_time_id, status FROM company_data
+    </select>
+
+    <delete id="deleteNewsById" parameterType="int">
+        DELETE FROM company_data WHERE id = #{id}
+    </delete>
+
+    <select id="getCompanyDataById" parameterType="int" resultMap="CompanyData">
+        SELECT * FROM company_data WHERE id = #{id}
+    </select>
+
+    <insert id="companyDataAdd" parameterType="CompanyData">
+        SET @TIME = now();
+        INSERT INTO company_data
+        (pid, company_id, survey_time_id, init_people, cur_people, reduce_type, reason1, reason1_explain, reason2,
+        reason2_explain, reason3, reason3_explain, other_reason, status, not_pass_reason, create_time, update_time)
+        VALUES
+        (#{id}, #{company_id}, #{survey_time_id}, #{init_people}, #{cur_people}, #{reduce_type}, #{reason1},
+        #{reason1_explain}, #{reason2}, #{reason2_explain}, #{reason3}, #{reason3_explain}, #{other_reason}, #{status},
+        #{not_pass_reason}, @TIME, @TIME )
+        <selectKey resultType="int" keyProperty="id">
+            <![CDATA[
+			SELECT LAST_INSERT_ID() as id
+			]]>
+        </selectKey>
+    </insert>
+
+    <select id="getTotalPeopleFromCompanyDataOfEverySuvryTime" resultType="CompanyData">
+        SELECT sum(cur_people) AS cur_people  FROM company_data
+        GROUP BY survey_time_id
+    </select>
+
+    <insert id="companyDataAddFirst" parameterType="CompanyData">
+        SET @TIME = now();
+        INSERT INTO company_data
+        (pid, company_id, survey_time_id, init_people, cur_people, reduce_type, reason1, reason1_explain, reason2, reason2_explain, reason3, reason3_explain, other_reason, status, not_pass_reason, create_time, update_time)
+
+        VALUES
+        (#{pid}, #{company_id}, #{survey_time_id}, #{init_people}, #{cur_people}, #{reduce_type}, #{reason1}, #{reason1_explain}, #{reason2}, #{reason2_explain}, #{reason3}, #{reason3_explain}, #{other_reason}, #{status}, #{not_pass_reason}, #{create_time}, @TIME )
+
+    </insert>
+
+    <select id="getAllCompanyDataFromSQL" resultMap="CompanyData">
+        SELECT * FROM company_data
+    </select>
+
+    <select id="getCompanyDataBySurveyTimeId" parameterType="int" resultMap="CompanyData">
+        SELECT * FROM company_data WHERE survey_time_id = #{survey_time_id} AND pid = 0
+    </select>
+
+    <select id="getCompanyDataCountByCity" resultType="java.lang.Integer">
+        SELECT count(1) FROM company_data WHERE status IN (-1, 0, 1);
+    </select>
+
+    <select id="getCompanyDataCountByProvince" resultType="java.lang.Integer">
+        SELECT count(1) FROM company_data WHERE status IN (-2, 1, 2, 3);
+    </select>
+
+    <select id="getCompanyDataList" resultMap="CompanyData">
+        SELECT * FROM company_data WHERE status IN
+        <foreach item="item" index="index" collection="ids"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        ORDER BY company_id
+    </select>
+
+    <update id="changeCompanyDataStatusById" parameterType="int">
+        UPDATE company_data SET status = 3 WHERE id = #{id}
+    </update>
+
+
+    <select id="getCompanyDataByCompanyIdS2" parameterType="int" resultMap="CompanyData">
+        SELECT * FROM company_data WHERE company_id = #{id} AND status = 2
+    </select>
+
+    <update id="updateCompanyDataStatus">
+        UPDATE company_data SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <select id="getCompanyDataByCompanyIdLastestTime" resultMap="CompanyData">
+        SELECT * FROM company_data WHERE company_id = #{company_id} ORDER BY update_time DESC
+    </select>
+
+    <select id="selectByStatus" resultMap="CompanyData" parameterType="java.lang.Integer">
+        SELECT * FROM company_data WHERE status = #{status}
+    </select>
+
+    <select id="selectBySurveyTimeID" resultMap="CompanyData" parameterType="java.lang.Integer">
+        SELECT * FROM company_data WHERE survey_time_id = #{id}
+    </select>
+
+    <select id="getToCheckCompanyDataCount" resultType="int">
+        SELECT count(1) FROM company_data WHERE status IN (0, 1)
+    </select>
+
+    <update id="updateCompanyData" parameterType="CompanyData">
+        SET @TIME = now();
+        UPDATE company_data
+        SET init_people = #{init_people} , cur_people = #{cur_people} , reduce_type = #{reduce_type} ,
+         reason1 = #{reason1} , reason1_explain = #{reason1_explain} ,
+          reason2 = #{reason2} , reason2_explain = #{reason2_explain} ,
+           reason3 = #{reason3} , reason3_explain = #{reason3_explain} , other_reason = #{other_reason} ,
+           status = 0 , update_time = @TIME WHERE id = #{id}
+    </update>
+
+    <update id="provinceCheck" >
+        UPDATE company_data SET status = #{status},not_pass_reason=#{npr} WHERE id=#{id}
+    </update>
+
+    <select id="selectByCompanyandSurveyTime" resultMap="CompanyData">
+          SELECT * FROM company_data WHERE survey_time_id = #{survey_time_id} AND company_id = #{company_id}
+    </select>
+</mapper>

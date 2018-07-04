@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shandong.human.resource.mapper.sys.UserMapper">
+
+    <resultMap id="User" type="com.shandong.human.resource.domain.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM user
+    </select>
+
+    <select id="selectAll" resultMap="User">
+        SELECT id ,username , password ,type FROM user
+    </select>
+
+    <select id="selectByPos" resultMap="User" parameterType="map">
+        SELECT id ,username , password ,type FROM user
+        limit #{offset},#{size}
+    </select>
+
+    <insert id="insertUser"  parameterType="com.shandong.human.resource.domain.User" >
+        <selectKey keyProperty="id" resultType="java.lang.Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO user (id , username , password ,type)
+        VALUES (#{id} , #{username} , #{password} , #{type})
+    </insert>
+
+    <delete id="deleteByID" parameterType="java.lang.Integer">
+        DELETE FROM user
+        WHERE id = #{id}
+    </delete>
+
+    <select id="selectByNamePwd" resultType="com.shandong.human.resource.domain.User" parameterType="map">
+        SELECT id ,username , password ,type FROM user
+        WHERE username=#{username} AND password=#{password}
+    </select>
+
+    <select id="selectByID" resultType="com.shandong.human.resource.domain.User" parameterType="java.lang.Integer">
+        SELECT id ,username , password ,type FROM user
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByName" resultType="com.shandong.human.resource.domain.User" parameterType="java.lang.String">
+        SELECT id ,username , password ,type FROM user
+        WHERE username = #{username}
+    </select>
+
+    <select id="selectByType" resultType="com.shandong.human.resource.domain.User" parameterType="java.lang.Integer">
+        SELECT id ,username , password ,type FROM user
+        WHERE type = #{type}
+    </select>
+</mapper>

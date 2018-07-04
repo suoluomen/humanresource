@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shandong.human.resource.mapper.sys.AuthMapper">
+
+    <resultMap id="Auth" type="com.shandong.human.resource.domain.Auth">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="pid" property="pid" />
+        <result column="level" property="level" />
+    </resultMap>
+
+    <insert id="insertAuth" parameterType="Auth">
+        INSERT INTO auth (id, name, url, pid, level)
+        VALUES (#{id}, #{name}, #{url}, #{pid}, #{level})
+    </insert>
+
+    <select id="selectAll" resultMap="Auth">
+        SELECT id, name, url, pid , level from auth
+    </select>
+
+    <select id="selectByID" resultType="com.shandong.human.resource.domain.Auth" parameterType="java.lang.Integer">
+        SELECT id, name, url, pid , level from auth
+        WHERE id = #{id};
+    </select>
+
+    <delete id="deleteByID" parameterType="java.lang.Integer">
+        DELETE FROM auth
+        WHERE id = #{id}
+    </delete>
+
+</mapper>

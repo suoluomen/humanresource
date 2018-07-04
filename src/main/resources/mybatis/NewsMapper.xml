@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shandong.human.resource.mapper.sys.NewsMapper">
+
+    <resultMap id="News" type="com.shandong.human.resource.domain.News">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <insert id="addNews"   parameterType="News" >
+        SET @TIME = now();
+        <![CDATA[
+            INSERT INTO news (user_id, title, content, create_time)
+            VALUES (#{userId}, #{title}, #{content}, @TIME)
+        ]]>
+        <selectKey resultType="int" keyProperty="id">
+            <![CDATA[
+                SELECT LAST_INSERT_ID() as id
+            ]]>
+        </selectKey>
+    </insert>
+
+    <select id="newsList" resultMap="News">
+        SELECT id, title, content, create_time from news
+        order by id desc
+    </select>
+
+    <delete id="deleteNewsById" parameterType="int">
+        DELETE FROM news WHERE id = #{id}
+    </delete>
+
+    <select id="selectNewsById" resultMap="News" parameterType="int">
+        SELECT * FROM news WHERE id = #{id}
+    </select>
+
+    <update id="editNewsById" parameterType="News">
+        UPDATE news SET title = #{title} , content = #{content} WHERE id = #{id}
+    </update>
+</mapper>

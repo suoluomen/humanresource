@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shandong.human.resource.mapper.home.AreaMapper">
+
+    <resultMap id="Area" type="com.shandong.human.resource.domain.Area">
+        <id column="id" property="id"/>
+        <result column="pid" property="pid"/>
+        <result column="name" property="name"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <select id="getAllProvince" resultMap="Area">
+        SELECT * FROM area WHERE pid=0
+    </select>
+    <select id="getAllCity" resultMap="Area">
+        SELECT * FROM area WHERE pid=16
+    </select>
+    <!--获取地区-->
+    <select id="getAllAreaById" resultMap="Area">
+    SELECT * FROM area WHERE pid=#{id}
+    </select>
+    <select id="getById" resultMap="Area">
+        SELECT * FROM area WHERE id=#{id}
+    </select>
+</mapper>
