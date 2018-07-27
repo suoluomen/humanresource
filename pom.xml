@@ -417,6 +417,6 @@
   </dependencies>
 
   <build>
-    <finalName>ROOT</finalName>
+    <finalName>sd-resource</finalName>
   </build>
 </project>
